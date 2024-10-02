@@ -45,6 +45,7 @@ const CampaignDetails = () => {
   const { mutate: sendTransaction } = useSendTransaction();
   const [fundAmount, setFundAmount] = useState("");
   const [project, setProject] = useState<Project>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let selectedProject = localStorage.getItem("selectedProject");
@@ -110,6 +111,8 @@ const CampaignDetails = () => {
       return;
     }
 
+    setLoading(true);
+
     // Prepare the contract call
     const transaction = await prepareContractCall({
       contract,
@@ -119,6 +122,17 @@ const CampaignDetails = () => {
     });
 
     sendTransaction(transaction);
+
+    setLoading(true);
+  }
+
+  if (loading) {
+    return (
+      <div className="h-screen flex flex-col w-full justify-center items-center ">
+        <LoadingSpinner />
+        <h2 className="mt-4">Processing Transaction...</h2>
+      </div>
+    );
   }
 
   return (
@@ -168,27 +182,18 @@ const CampaignDetails = () => {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="font-semibold">
-                        {(
-                          project.donations.reduce(
-                            (partialSum, a) => partialSum + Number(a),
-                            0
-                          ) * 0.5
-                        ).toFixed(1)}{" "}
-                        ETH
+                        {project.amountCollected} ETH
                       </span>
-                      <span className="text-sm text-gray-500">
-                        raised of {project.target} ETH goal
+                      <span className="font-semibold">
+                        {project.target} ETH Goal
                       </span>
                     </div>
                     <Progress
-                      value={Number(
-                        (
-                          project.donations.reduce(
-                            (partialSum, a) => partialSum + Number(a),
-                            0
-                          ) * 0.5
-                        ).toFixed(1)
-                      )}
+                      value={
+                        (Number(project.amountCollected) /
+                          Number(project.target)) *
+                        100
+                      }
                       className="w-full"
                     />
                     <div className="flex justify-between text-sm">
@@ -229,9 +234,15 @@ const CampaignDetails = () => {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    <li>🎁 0.1 ETH - Early Access</li>
-                    <li>🏆 0.5 ETH - Limited Edition NFT</li>
-                    <li>🌟 1 ETH - Lifetime Premium Membership</li>
+                    <li>
+                      🎁 {(Number(project.target) * 20) / 100} ETH - Early
+                      Access
+                    </li>
+                    <li>
+                      🏆 {(Number(project.target) * 50) / 100} ETH - Limited
+                      Edition NFT
+                    </li>
+                    <li>🌟 {project.target} ETH - Premium Membership</li>
                   </ul>
                 </CardContent>
               </Card>

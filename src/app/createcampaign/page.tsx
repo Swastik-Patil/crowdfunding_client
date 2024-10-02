@@ -48,11 +48,24 @@ const CreateCampaign = () => {
       return;
     }
 
-    setIsLoading(true);
+    if (
+      formData.target === "" ||
+      formData.deadline === "" ||
+      formData.image === ""
+    ) {
+      alert("Please fill in all fields");
+      return;
+    }
 
+    if (Number(formData.target) <= 0) {
+      alert("Target must be greater than 0");
+      return;
+    }
+
+    setIsLoading(true);
     checkIfImage(formData.image, async (isValid: Boolean) => {
-      setIsLoading(false);
       if (!isValid) {
+        setIsLoading(false);
         alert("Invalid image URL");
         return;
       } else {
@@ -60,7 +73,6 @@ const CreateCampaign = () => {
         const target = await convertEthToBigInt(formData.target);
         const deadline = BigInt(new Date(formData.deadline).getTime() / 1000);
 
-        return;
         const transaction = prepareContractCall({
           contract,
           method:
@@ -76,6 +88,7 @@ const CreateCampaign = () => {
         });
 
         sendTransaction(transaction);
+        setIsLoading(false);
       }
     });
   }

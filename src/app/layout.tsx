@@ -7,9 +7,9 @@ import Header from "@/app/components/Header";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "thirdweb SDK + Next starter",
+  title: "BlockFund",
   description:
-    "Starter template for using thirdweb SDK with Next.js App router",
+    "BlockFund is a decentralized crowdfunding platform that allows users to create and fund projects using blockchain technology.",
 };
 
 export default function RootLayout({

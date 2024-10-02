@@ -42,7 +42,6 @@ function HomePage() {
       // Go to next project
       return;
     }
-
     return {
       owner: project.owner,
       title: project.title,
