@@ -47,13 +47,13 @@ function HomePage() {
       owner: project.owner,
       title: project.title,
       description: project.description,
-      target: ethers.utils.formatEther(project.target),
+      target: ethers.formatEther(project.target),
       deadline: project.deadline,
-      amountCollected: ethers.utils.formatEther(project.amountCollected),
+      amountCollected: ethers.formatEther(project.amountCollected),
       image: project.image,
       donators: project.donators,
       donations: project.donations.map((donation) =>
-        ethers.utils.formatEther(donation)
+        ethers.formatEther(donation)
       ),
     };
   });
